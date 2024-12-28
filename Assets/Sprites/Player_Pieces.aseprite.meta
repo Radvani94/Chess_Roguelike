@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ba7d200e069c53a49a644506129cb751
+guid: 8ba9804d4e09b8a4eba83fc323951a7b
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,7 +123,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Chess_Board
+  - name: Player_Pieces
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -133,9 +133,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 256
-      height: 96
-    spriteID: de2bda002fa937849931fe5c5dbc6dc9
+      width: 64
+      height: 19
+    spriteID: 39b97417a575e5049a88a490de5b3dbd
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -147,21 +147,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 2015125859
-    name: Chess_Board
+    guid: -1150006383
+    name: Player_Pieces
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Chess_Board
+    - name: Player_Pieces
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
-        width: 256
-        height: 96
-      spriteId: de2bda002fa937849931fe5c5dbc6dc9
+        width: 64
+        height: 19
+      spriteId: 39b97417a575e5049a88a490de5b3dbd
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -180,5 +180,5 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 256, y: 96}
-  previousTextureSize: {x: 512, y: 128}
+  canvasSize: {x: 64, y: 32}
+  previousTextureSize: {x: 128, y: 32}
