@@ -71,11 +71,11 @@ public class MapManager : MonoBehaviour
 
                         //overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tileMap.GetComponent<TilemapRenderer>().sortingOrder;
 
+                        overlayTile.gridLocation = tileLocation;
                         map.Add(tileKey, overlayTile);
                     }
                     else
                     {
-                        Debug.Log("TileMap no location");
                     }
                 }
             }
