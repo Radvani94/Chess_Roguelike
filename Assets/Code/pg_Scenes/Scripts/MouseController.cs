@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class MouseController : MonoBehaviour
 {
@@ -11,6 +11,28 @@ public class MouseController : MonoBehaviour
 
     private PathFinder pathFinder;
     private List<OverlayTile> path = new List<OverlayTile>();
+
+    private UnityAction ClickAction;
+    private bool input_click;
+
+    private void Awake()
+    {
+        ClickAction = new UnityAction(ClickInput);
+    }
+    private void OnEnable()
+    {
+        ChessEventSystem.StartListening("Input_Click", ClickAction);
+    }
+
+    private void OnDisable()
+    {
+        ChessEventSystem.StopListening("Input_Click", ClickAction);
+    }
+
+    private void ClickInput()
+    {
+        input_click = true;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,9 +50,8 @@ public class MouseController : MonoBehaviour
             transform.position = overlayTile.transform.position;
             gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
-            if (Input.GetMouseButtonDown(0))
+            if (input_click)
             {
-                
                 overlayTile.GetComponent<OverlayTile>().ShowTile();
 
                 if(character == null)
@@ -42,6 +63,8 @@ public class MouseController : MonoBehaviour
                 {
                     path = pathFinder.FindPath(character.activeTile, overlayTile);
                 }
+
+                input_click = false;
             }
         }
 
