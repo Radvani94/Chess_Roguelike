@@ -47,7 +47,7 @@ public class CameraController : MonoBehaviour
     {
         input_click = true;
         input_point = (Vector2)data;
-        Debug.Log(input_point);
+        //Debug.Log(input_point);
     }
 
     //Move Camera based on point down and point vector offsets

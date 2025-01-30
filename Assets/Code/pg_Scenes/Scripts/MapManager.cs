@@ -13,6 +13,10 @@ public class MapManager : MonoBehaviour
     public GameObject overlayContainer;
 
     public Dictionary<Vector2Int, OverlayTile> map;
+    public List<OverlayTile> _overlayTiles;
+
+    private bool _overlaySetCreated;
+    public bool OverlaySetCreated { get { return _overlaySetCreated; } }
 
     private void Awake()
     {
@@ -33,22 +37,8 @@ public class MapManager : MonoBehaviour
         map = new Dictionary<Vector2Int, OverlayTile>();
         Tilemap tileMap = gameObject.GetComponentInChildren<Tilemap>();
         BoundsInt bounds = tileMap.cellBounds;
-       
-        /*for (int i = 0; i < tileMaps.Length; i++)
-        {
-            Debug.Log(tileMaps[i]);
-            if (tileMaps[i] !=null && tileMaps[i].CompareTag("Pieces"))
-            {
-                bounds = tileMaps[i].cellBounds;
-                tileMap = tileMaps[i];
-                break;
-            }
-            else
-            {
-                Debug.LogError("TILE MAP NOT FOUND");
-            }
-        }*/
-
+        _overlayTiles = new List<OverlayTile>();
+        _overlaySetCreated = false;
 
         for (int z = bounds.max.z; z >= bounds.min.z; z--)
         {
@@ -73,6 +63,7 @@ public class MapManager : MonoBehaviour
 
                         overlayTile.gridLocation = tileLocation;
                         map.Add(tileKey, overlayTile);
+                        _overlayTiles.Add(overlayTile);
                     }
                     else
                     {
@@ -80,6 +71,14 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
+        _overlaySetCreated = true;
+        Debug.Log("Map Created");
 
+    }
+
+    public void GetOverlayTiles( out List<OverlayTile> _tileSet)
+    {
+        if (_overlaySetCreated) _tileSet = _overlayTiles;
+        else _tileSet = null;
     }
 }
