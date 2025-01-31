@@ -100,10 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87db88e79c3207c489506e6fb852e0ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _MMInstance: {fileID: 0}
   speed: 2
   characterPrefab: {fileID: 3686754990278304542, guid: a9597004bf93750478a97db85a24dbf8, type: 3}
   character: {fileID: 0}
   startPosition: {fileID: 0}
-  startPositionPreset: {x: 0, y: 0}
+  startWorldPosition: {x: -1.913, y: -0.85}
   token: {fileID: 0}
   _playTiles: {fileID: 0}

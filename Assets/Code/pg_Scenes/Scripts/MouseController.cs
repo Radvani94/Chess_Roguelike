@@ -12,6 +12,9 @@ public class MouseController : MonoBehaviour
     public MapManager _MMInstance;
     private List<OverlayTile> _overlaySet;
     public float speed;
+    private bool _isMoving = false;
+    public bool IsMoving { get { return _isMoving; } }
+
     public GameObject characterPrefab;
     public CharacterInfo character;
 
@@ -22,9 +25,8 @@ public class MouseController : MonoBehaviour
     private bool input_click;
 
     [SerializeField] private Transform startPosition;
-    [SerializeField] private Vector2 startPositionPreset;
+    [SerializeField] private Vector2 startWorldPosition;
 
-    [SerializeField] private GameObject token;
 
 
     [SerializeField] private Tilemap _playTiles;
@@ -75,12 +77,7 @@ public class MouseController : MonoBehaviour
             {
                 overlayTile.GetComponent<OverlayTile>().ShowTile();
 
-                if(character == null)
-                {
-                    character = Instantiate(characterPrefab).GetComponent<CharacterInfo>();
-                    PositionCharacterOnTile(overlayTile);
-                }
-                else
+                if(character != null)
                 {
                     path = pathFinder.FindPath(character.activeTile, overlayTile);
                 }
@@ -91,8 +88,17 @@ public class MouseController : MonoBehaviour
 
         if(path.Count>0)
         {
+            _isMoving = true;
             MoveAlongPath();
         }
+        else if(path.Count == 0 && _isMoving)
+        {
+            _isMoving = false;
+            //Event for Camera
+            ChessEventSystem.TriggerEvent("MovementComplete");
+        }
+        
+
     }
 
     private void MoveAlongPath()
@@ -109,7 +115,7 @@ public class MouseController : MonoBehaviour
             path.RemoveAt(0);
         }
 
-       
+        
     }
 
     private void PositionCharacterOnTile(OverlayTile tile)
@@ -121,15 +127,13 @@ public class MouseController : MonoBehaviour
 
     private void PositionCharacterOnTile(Vector3 tilePos)
     {
-        Vector2Int mousePos2D = new Vector2Int((int)tilePos.x, (int)tilePos.y);
+        Vector2Int tilePos2D = new Vector2Int((int)tilePos.x, (int)tilePos.y);
         OverlayTile tile;
-        _MMInstance.map.TryGetValue(mousePos2D, out tile);
-        Debug.Log("Got Value: " + tile);
+        _MMInstance.map.TryGetValue(tilePos2D, out tile);
 
-        RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero, 100f);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(tilePos2D, Vector2.zero, 100f);
         foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("LOOP: "+ hit.collider.gameObject);
             OverlayTile t;
             if (hit.collider.gameObject.TryGetComponent<OverlayTile>(out t))
             {
@@ -137,12 +141,6 @@ public class MouseController : MonoBehaviour
             }
 
         }
-        Debug.Log("END OF LOOP");
-        //token.transform.position = _playTiles.CellToWorld(cellPosition1);
-        /*transform.position = worldPosition;*/
-        /*character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.001f, tile.transform.position.z);
-        character.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder;
-        character.activeTile = tile;*/
     }
 
     public RaycastHit2D? GetFocusedOnTile()
@@ -169,13 +167,11 @@ public class MouseController : MonoBehaviour
         Vector2Int mousePos2D = new Vector2Int((int)_pos2D.x, (int)_pos2D.y);
         OverlayTile tile;
         _MMInstance.map.TryGetValue(mousePos2D, out tile); 
-        Debug.Log("Tile Ref: "+tile);
-
+        
         RaycastHit2D[] hits = Physics2D.RaycastAll(_pos2D, Vector2.zero, 100f);
         
         foreach (RaycastHit2D hit in hits)
         {
-            Debug.Log("FOR EACH LOOP");
             Debug.Log(hit.collider.gameObject);
             OverlayTile t;
             if (hit.collider.gameObject.TryGetComponent<OverlayTile>(out t))
@@ -185,10 +181,10 @@ public class MouseController : MonoBehaviour
                 gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
                 overlayTile.GetComponent<OverlayTile>().ShowTile();
                 Debug.Log(overlayTile.gridLocation);
-                token.transform.position = overlayTile.gridLocation;
 
                 if (character == null)
                 {
+                    Debug.Log("Hi New Player Prefab");
                     character = Instantiate(characterPrefab).GetComponent<CharacterInfo>();
                     PositionCharacterOnTile(overlayTile);
                 }
@@ -197,33 +193,24 @@ public class MouseController : MonoBehaviour
                     character.transform.position = overlayTile.transform.position;
                 }
             }
-            else
-            {
-                //if its a tilemap tile
-            }
-
         }
-        Debug.Log("End of Loop");
     }
 
     IEnumerator StartDelayCoroutine()
     {
         
         yield return new WaitForSeconds(1);
-        startPositionPreset = new Vector2(58, 230);
-        startPosition.transform.position = Camera.main.ScreenToWorldPoint(startPositionPreset);
-        Vector2 pos = new Vector2(startPosition.transform.position.x, startPosition.transform.position.y);
+
         if (_MMInstance.OverlaySetCreated)
         {
             _MMInstance.GetOverlayTiles(out _overlaySet);
         }
-        PlaceCharacterOnTile(pos);
+        PlaceCharacterOnTile(startWorldPosition);
     }
     /*
-        Get Vec2 pos
-        convert to world pos
-        find Overlay Tile
-        spawn Player on tile     
+        Get Vec2 World Position
+        Wait for _MMInstance
+        PlaceCharacterOnTile(startWorldPos)
      */
 
 

@@ -43,6 +43,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Pieces
+    uniqueID: 1053257131
+    locked: 0
   - name: Base
     uniqueID: 2628873533
     locked: 0
@@ -51,3 +54,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  - Pieces
